@@ -23,6 +23,7 @@ exports.login = async (req, res) => {
             })
         }
         const userWithToken = generateJwt(user.get({ raw: true }))
+        userWithToken.user.avatar=user.avatar
         return res.send(userWithToken)
     } catch (e) {
         return res.status(500).json({
@@ -46,5 +47,5 @@ exports.register = async (req, res) => {
 const generateJwt = (user) => {
     delete user.password
     const token = jwt.sign(user, config.appKey, { expiresIn: 86400 }) //86400s=1 week
-    return { ...user, ...{ token } }
+    return { ...{user}, ...{ token } }
 }
